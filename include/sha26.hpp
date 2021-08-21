@@ -4,11 +4,11 @@
 #include <array>
 #include <cassert>
 #include <vector>
+#include <string>
+#include <exception>
 
 typedef unsigned char byte;
 
-#include <string>
-#include <exception>
 
 class InvalidOperationException : public std::exception
 {
