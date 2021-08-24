@@ -123,9 +123,9 @@ namespace Crypto
              *  @param shift 
              *      no of bits to be rotated
              * 
-            *   @return 
-            *       the rotated value
-            */
+             *   @return 
+             *       the rotated value
+            **/
 
 			static uint32_t RotateLeft(uint32_t uiNumber, unsigned short shift);
 
@@ -138,7 +138,7 @@ namespace Crypto
              * 
 			 *  @return 
              *      reversed value
-            */
+            **/
 			static uint32_t ReverseByte(uint32_t uiNumber);
 		};
 
@@ -388,10 +388,22 @@ namespace Crypto
 
 	uint32_t Md5::Md5Helper::ReverseByte(uint32_t uiNumber)
 	{
-		return (((uiNumber & 0x000000ff) << 24) | (uiNumber >> 24) | ((uiNumber & 0x00ff0000) >> 8) | ((uiNumber & 0x0000ff00) << 8));
+		return (
+			((uiNumber & 0x000000ff) << 24) | (uiNumber >> 24) | 
+			((uiNumber & 0x00ff0000) >> 8) | ((uiNumber & 0x0000ff00) << 8)
+		);
 	}
 
-	const std::vector<uint32_t> Md5::T = {0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee, 0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501, 0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be, 0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821, 0xf61e2562, 0xc040b340, 0x265e5a51, 0xe9b6c7aa, 0xd62f105d, 0x2441453, 0xd8a1e681, 0xe7d3fbc8, 0x21e1cde6, 0xc33707d6, 0xf4d50d87, 0x455a14ed, 0xa9e3e905, 0xfcefa3f8, 0x676f02d9, 0x8d2a4c8a, 0xfffa3942, 0x8771f681, 0x6d9d6122, 0xfde5380c, 0xa4beea44, 0x4bdecfa9, 0xf6bb4b60, 0xbebfbc70, 0x289b7ec6, 0xeaa127fa, 0xd4ef3085, 0x4881d05, 0xd9d4d039, 0xe6db99e5, 0x1fa27cf8, 0xc4ac5665, 0xf4292244, 0x432aff97, 0xab9423a7, 0xfc93a039, 0x655b59c3, 0x8f0ccc92, 0xffeff47d, 0x85845dd1, 0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1, 0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391};
+	const std::vector<uint32_t> Md5::T = { 
+		0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee, 0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501, 
+		0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be, 0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821, 
+		0xf61e2562, 0xc040b340, 0x265e5a51, 0xe9b6c7aa, 0xd62f105d, 0x2441453,  0xd8a1e681, 0xe7d3fbc8, 
+		0x21e1cde6, 0xc33707d6, 0xf4d50d87, 0x455a14ed, 0xa9e3e905, 0xfcefa3f8, 0x676f02d9, 0x8d2a4c8a, 
+		0xfffa3942, 0x8771f681, 0x6d9d6122, 0xfde5380c, 0xa4beea44, 0x4bdecfa9, 0xf6bb4b60, 0xbebfbc70, 
+		0x289b7ec6, 0xeaa127fa, 0xd4ef3085, 0x4881d05,  0xd9d4d039, 0xe6db99e5, 0x1fa27cf8, 0xc4ac5665, 
+		0xf4292244, 0x432aff97, 0xab9423a7, 0xfc93a039, 0x655b59c3, 0x8f0ccc92, 0xffeff47d, 0x85845dd1, 
+		0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1, 0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391
+	};
 
 	std::string Md5::getStringValue() const
 	{
@@ -616,22 +628,37 @@ namespace Crypto
 	}
 	std::vector<unsigned char> Md5::CreatePaddedBuffer()
 	{
-		uint32_t pad;										///< no of padding bits for 448 mod 512
-		std::vector<unsigned char> bMsg;					///< buffer to hold bits
-		unsigned long long sizeMsg;							///< 64 bit size pad
-		uint32_t sizeMsgBuff;								///< buffer size in multiple of bytes
-		int temp = (448 - ((_byteInput.size() * 8) % 512)); ///< temporary
+		///< no of padding bits for 448 mod 512
+		uint32_t pad;
 
-		pad = static_cast<uint32_t>((temp + 512) % 512); ///< getting no of bits to  be pad
-		if (pad == 0)									 ///<  pad is in bits
+		///< buffer to hold bits
+		std::vector<unsigned char> bMsg;
+
+		///< 64 bit size pad
+		unsigned long long sizeMsg;
+		
+		///< buffer size in multiple of bytes
+		uint32_t sizeMsgBuff;
+
+		///< temporary
+		int temp = (448 - ((_byteInput.size() * 8) % 512));
+
+		///< getting no of bits to  be pad
+		pad = static_cast<uint32_t>((temp + 512) % 512); 
+
+		///<  pad is in bits
+		if (pad == 0)
 		{
-			pad = 512; ///< at least 1 or max 512 can be added
+			///< at least 1 or max 512 can be added
+			pad = 512;
 		}
 
 		sizeMsgBuff = static_cast<uint32_t>((_byteInput.size()) + (pad / 8) + 8);
 		sizeMsg = static_cast<unsigned long long>(_byteInput.size()) * 8;
-		bMsg = std::vector<unsigned char>(sizeMsgBuff); ///<  no need to pad with 0 coz new bytes
-														///<  are already initialize to 0 :)
+
+		///<  no need to pad with 0 coz new bytes
+		///<  are already initialize to 0 :)
+		bMsg = std::vector<unsigned char>(sizeMsgBuff); 
 
 		///< copying string to buffer
 		for (int i = 0; i < _byteInput.size(); i++)
@@ -639,7 +666,8 @@ namespace Crypto
 			bMsg[i] = _byteInput[i];
 		}
 
-		bMsg[_byteInput.size()] |= 0x80; ///< making first bit of padding 1,
+		///< making first bit of padding 1,
+		bMsg[_byteInput.size()] |= 0x80;
 
 		///< wrting the size value
 		for (int i = 8; i > 0; i--)
@@ -655,7 +683,11 @@ namespace Crypto
 		block = block << 6;
 		for (uint32_t j = 0; j < 61; j += 4)
 		{
-			X[j >> 2] = ((static_cast<uint32_t>(bMsg[block + (j + 3)])) << 24) | ((static_cast<uint32_t>(bMsg[block + (j + 2)])) << 16) | ((static_cast<uint32_t>(bMsg[block + (j + 1)])) << 8) | ((static_cast<uint32_t>(bMsg[block + (j)])));
+			X[j >> 2] = 
+			((static_cast<uint32_t>(bMsg[block + (j + 3)])) << 24) | 
+			((static_cast<uint32_t>(bMsg[block + (j + 2)])) << 16) | 
+			((static_cast<uint32_t>(bMsg[block + (j + 1)])) << 8) | 
+			((static_cast<uint32_t>(bMsg[block + (j)])));
 		}
 	}
 
