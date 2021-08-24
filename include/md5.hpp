@@ -187,6 +187,7 @@ namespace Crypto
 		 * 	@return std::string 
 		 */
 		std::string getHexDigest() const;
+
 	private:
 		/**
 		 * 	@brief 
@@ -221,7 +222,6 @@ namespace Crypto
 		 */
 		void TransH(uint32_t &a, uint32_t b, uint32_t c, uint32_t d, uint32_t k, unsigned short s, uint32_t i);
 
-
 		/**
 		 * 	@brief 
 		 * 		perform transformatio using i (c^(b|~d))
@@ -242,7 +242,6 @@ namespace Crypto
 		 * 		the padded buffer as byte array
 		 */
 		std::vector<byte> CreatePaddedBuffer();
-
 
 		/**
 		 * 	@brief
@@ -623,26 +622,26 @@ namespace Crypto
 		uint32_t sizeMsgBuff;								///< buffer size in multiple of bytes
 		int temp = (448 - ((_byteInput.size() * 8) % 512)); ///< temporary
 
-		pad = static_cast<uint32_t>((temp + 512) % 512); 	///< getting no of bits to  be pad
-		if (pad == 0)									 	///<  pad is in bits
+		pad = static_cast<uint32_t>((temp + 512) % 512); ///< getting no of bits to  be pad
+		if (pad == 0)									 ///<  pad is in bits
 		{
-			pad = 512; 										///< at least 1 or max 512 can be added
+			pad = 512; ///< at least 1 or max 512 can be added
 		}
 
 		sizeMsgBuff = static_cast<uint32_t>((_byteInput.size()) + (pad / 8) + 8);
 		sizeMsg = static_cast<unsigned long long>(_byteInput.size()) * 8;
-		bMsg = std::vector<unsigned char>(sizeMsgBuff); 	///<  no need to pad with 0 coz new bytes
-															///<  are already initialize to 0 :)
+		bMsg = std::vector<unsigned char>(sizeMsgBuff); ///<  no need to pad with 0 coz new bytes
+														///<  are already initialize to 0 :)
 
-															///< copying string to buffer
+		///< copying string to buffer
 		for (int i = 0; i < _byteInput.size(); i++)
 		{
 			bMsg[i] = _byteInput[i];
 		}
 
-		bMsg[_byteInput.size()] |= 0x80; 					///< making first bit of padding 1,
+		bMsg[_byteInput.size()] |= 0x80; ///< making first bit of padding 1,
 
-															///< wrting the size value
+		///< wrting the size value
 		for (int i = 8; i > 0; i--)
 		{
 			bMsg[sizeMsgBuff - i] = static_cast<unsigned char>(sizeMsg >> ((8 - i) * 8) & 0x00000000000000ff);
